@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  roles        UserRole[]
+  urls         Url[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  users       UserRole[]
+
+  @@map("roles")
+}
+
+model UserRole {
+  userId     String
+  roleId     String
+  assignedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model Url {
+  id          String    @id @default(uuid())
+  sequence    BigInt    @unique @default(autoincrement())
+  shortCode   String    @unique
+  originalUrl String
+  userId      String
+  isActive    Boolean   @default(true)
+  deletedAt   DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clickEvents ClickEvent[]
+
+  @@index([userId])
+  @@map("urls")
+}
+
+model ClickEvent {
+  id        String    @id @default(uuid())
+  urlId     String?
+  ipAddress String
+  userAgent String
+  referrer  String?
+  country   String?
+  browser   String?
+  os        String?
+  device    String?
+  clickedAt DateTime  @default(now())
+
+  url       Url?      @relation(fields: [urlId], references: [id], onDelete: SetNull)
+
+  @@index([urlId, clickedAt])
+  @@map("click_events")
+}
+
+model RefreshToken {
+  id                String        @id @default(uuid())
+  userId            String
+  tokenHash         String        @unique
+  deviceInfo        String?
+  ipAddress         String?
+  expiresAt         DateTime
+  revokedAt         DateTime?
+  replacedByTokenId String?       @unique
+  createdAt         DateTime      @default(now())
+
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replacedByToken RefreshToken? @relation("TokenRotation", fields: [replacedByTokenId], references: [id])
+  previousToken   RefreshToken? @relation("TokenRotation")
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}

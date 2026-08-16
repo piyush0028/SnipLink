@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: sniplink-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sniplink-db
+          property: connectionString
+      - key: REDIS_URL
+        value: redis://red-xxxxx:6379 # To be replaced with actual Render Redis URL
+      - key: RABBITMQ_URL
+        value: amqp://user:password@host/vhost # To be replaced with actual CloudAMQP URL
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: BASE_URL
+        value: https://sniplink-api.onrender.com # Change if using custom domain
+      - key: CORS_ORIGIN
+        value: https://your-vercel-frontend.vercel.app # Change to Vercel URL
+    rootDir: backend
+
+  - type: worker
+    name: sniplink-click-worker
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run worker:click
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sniplink-db
+          property: connectionString
+      - key: RABBITMQ_URL
+        value: amqp://user:password@host/vhost # To be replaced with actual CloudAMQP URL
+    rootDir: backend
+
+databases:
+  - name: sniplink-db
+    databaseName: url_shortener
+    user: postgres
+    plan: free
