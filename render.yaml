@@ -14,17 +14,17 @@ services:
           name: sniplink-db
           property: connectionString
       - key: REDIS_URL
-        value: redis://red-xxxxx:6379 # To be replaced with actual Render Redis URL
+        sync: false
       - key: RABBITMQ_URL
-        value: amqp://user:password@host/vhost # To be replaced with actual CloudAMQP URL
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: BASE_URL
-        value: https://sniplink-api.onrender.com # Change if using custom domain
+        value: https://sniplink-api.onrender.com 
       - key: CORS_ORIGIN
-        value: https://your-vercel-frontend.vercel.app # Change to Vercel URL
+        sync: false
     rootDir: backend
 
   - type: worker
@@ -40,7 +40,7 @@ services:
           name: sniplink-db
           property: connectionString
       - key: RABBITMQ_URL
-        value: amqp://user:password@host/vhost # To be replaced with actual CloudAMQP URL
+        sync: false
     rootDir: backend
 
 databases:
