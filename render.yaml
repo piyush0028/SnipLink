@@ -3,7 +3,7 @@ services:
     name: sniplink-api
     env: node
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    startCommand: npm run start:all
     envVars:
       - key: NODE_ENV
         value: production
@@ -24,22 +24,6 @@ services:
       - key: BASE_URL
         value: https://sniplink-api.onrender.com 
       - key: CORS_ORIGIN
-        sync: false
-    rootDir: backend
-
-  - type: worker
-    name: sniplink-click-worker
-    env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm run worker:click
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: sniplink-db
-          property: connectionString
-      - key: RABBITMQ_URL
         sync: false
     rootDir: backend
 
