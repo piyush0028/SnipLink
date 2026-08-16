@@ -45,6 +45,4 @@ services:
 
 databases:
   - name: sniplink-db
-    databaseName: url_shortener
-    user: postgres
     plan: free
