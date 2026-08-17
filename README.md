@@ -1,8 +1,10 @@
-# ⚡ Sniplink — Distributed URL Shortener
+# Sniplink — Distributed URL Shortener
+
+**Live Demo:** [https://snip-link-iota.vercel.app/](https://snip-link-iota.vercel.app/)
 
 A blazing-fast, production-grade URL shortener built for scale. Features real-time analytics, Redis caching, and asynchronous event processing via RabbitMQ.
 
-## 🚀 Architecture
+## Architecture
 
 ```mermaid
 graph TD
@@ -35,7 +37,7 @@ graph TD
     Worker -->|Batch Insert| Postgres
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Component | Technology | Purpose |
 |-----------|------------|---------|
@@ -47,21 +49,21 @@ graph TD
 | **Testing** | Vitest, Supertest | Integration and unit testing |
 | **DevOps** | Docker, Docker Compose | Containerization for local dev and deployment |
 
-## 🔑 Key Engineering Decisions
+## Key Engineering Decisions
 
 1. **Redis Caching:** URL lookups are cached to ensure sub-millisecond redirect times. We also use *negative caching* (caching 404s) to prevent database hammering on invalid links.
 2. **Asynchronous Analytics:** Every time a user clicks a short link, we don't write to the database immediately. Instead, we publish an event to RabbitMQ. A separate background worker consumes these events and inserts them into PostgreSQL. This keeps the redirect endpoint extremely fast and responsive under load.
 3. **Sliding-Window Rate Limiting:** Implemented via custom Redis Lua scripts to provide precise rate limiting for API endpoints (e.g., max 10 URL creations per minute).
 4. **JWT Token Rotation:** Access tokens (short-lived) and Refresh tokens (long-lived, hashed in DB). Includes reuse detection to revoke token families if a refresh token is stolen.
 
-## 💻 Running Locally (with Docker)
+## Running Locally (with Docker)
 
 The easiest way to run the entire stack (PostgreSQL, Redis, RabbitMQ, API, and Worker) is using Docker Compose.
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/piyush0028/SnipLink.git
-cd distributed-url-shortener
+cd SnipLink
 
 # 2. Start all backend services
 docker-compose up -d
@@ -74,14 +76,14 @@ npm run dev
 
 The frontend will be available at `http://localhost:3001` and the backend at `http://localhost:3000`.
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd backend
 npm test
 ```
 
-## 🌐 API Endpoints Overview
+## API Endpoints Overview
 
 | Method | Endpoint | Description | Auth |
 |--------|----------|-------------|------|
