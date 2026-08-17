@@ -148,8 +148,8 @@ export default function AnalyticsPage() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={({ browser, percent }) =>
-                    `${browser} (${(percent * 100).toFixed(0)}%)`
+                  label={(props: any) =>
+                    `${props.name ?? ''} (${((props.percent ?? 0) * 100).toFixed(0)}%)`
                   }
                   labelLine={{ stroke: "rgba(255,255,255,0.2)" }}
                   fontSize={11}
@@ -189,8 +189,8 @@ export default function AnalyticsPage() {
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
-                  label={({ device, percent }) =>
-                    `${device} (${(percent * 100).toFixed(0)}%)`
+                  label={(props: any) =>
+                    `${props.name ?? ''} (${((props.percent ?? 0) * 100).toFixed(0)}%)`
                   }
                   labelLine={{ stroke: "rgba(255,255,255,0.2)" }}
                   fontSize={11}

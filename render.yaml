@@ -2,7 +2,7 @@ services:
   - type: web
     name: sniplink-api
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && npx prisma migrate deploy && npm run build
     startCommand: npm run start:all
     envVars:
       - key: NODE_ENV
@@ -22,7 +22,7 @@ services:
       - key: JWT_REFRESH_SECRET
         generateValue: true
       - key: BASE_URL
-        value: https://sniplink-api.onrender.com 
+        sync: false
       - key: CORS_ORIGIN
         sync: false
     rootDir: backend

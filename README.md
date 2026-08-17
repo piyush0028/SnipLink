@@ -60,7 +60,7 @@ The easiest way to run the entire stack (PostgreSQL, Redis, RabbitMQ, API, and W
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/distributed-url-shortener.git
+git clone https://github.com/piyush0028/SnipLink.git
 cd distributed-url-shortener
 
 # 2. Start all backend services
