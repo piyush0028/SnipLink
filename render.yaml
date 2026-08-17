@@ -2,6 +2,7 @@ services:
   - type: web
     name: sniplink-api
     env: node
+    plan: free
     buildCommand: npm install && npx prisma migrate deploy && npm run build
     startCommand: npm run start:all
     envVars:
@@ -10,9 +11,7 @@ services:
       - key: PORT
         value: 10000
       - key: DATABASE_URL
-        fromDatabase:
-          name: sniplink-db
-          property: connectionString
+        sync: false
       - key: REDIS_URL
         sync: false
       - key: RABBITMQ_URL
@@ -26,7 +25,3 @@ services:
       - key: CORS_ORIGIN
         sync: false
     rootDir: backend
-
-databases:
-  - name: sniplink-db
-    plan: free
